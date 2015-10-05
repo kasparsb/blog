@@ -1,0 +1,58 @@
+#Quick intro to Gulp
+
+Gulp provides basic api
+
+First one is task('name', cb)
+
+gulp.task('task1', function(){
+    // Here comes code for task
+})
+
+Next crucial method ir .src('pattern'). You provide pattern
+for files and gulp handles each of matched files
+
+
+gulp.src('app.js') // Here we selected only one file
+
+
+dest method saves passed file to destionation
+gulp.dest('destination/directory')
+
+For example
+
+gulp.src('app.js') // Select app.js
+.pipe(gulp.dest('destination/directory')) // Pipe this file to desc
+
+app.js will be saved in destination/directory/app.js
+
+Now you wonder, how can one save app.js with different file name
+
+Module gulp-rename comes to rescue
+
+To rename file, simply pipe it to rename
+
+gulp.src('app.js') // Select app.js
+.pipe(rename('newapp.js'))
+.pipe(gulp.dest('destination/directory')) // Pipe this file to desc
+
+## How to get access to package.json
+
+Like this
+
+var pkg = require('./package.json');
+
+Now you can incorporate packages version number into file name
+
+gulp.src('app.js') // Select app.js
+.pipe(rename('newapp'+pkg.version+'.js'))
+.pipe(gulp.dest('destination/directory')) // Pipe this file to desc
+
+Complete task
+
+gulp.task('task1', function(){
+    gulp
+        .src('./resources/assets/js/app.js')
+        .pipe(rename('app-'+pkg.version+'.js'))
+        .pipe(gulp.dest('./public/build/'))
+
+})

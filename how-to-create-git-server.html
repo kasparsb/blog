@@ -1,0 +1,41 @@
+How to create git server
+
+Install Ubuntu 15
+
+condfigure ufw
+    ufw default deny incoming
+    ufw default deny outgoing
+    disable ping
+        /etc/ufw/before.rules and comment out this line:
+        -A ufw-before-input -p icmp --icmp-type echo-request -j ACCEPT
+
+Add ssh key in ~/.ssh/authorized_keys
+
+Set up git server
+    apt-get install git
+    create user git
+
+Disable auth with passwords for all
+    Allow login with password for root, but create very strong password
+
+    vi /etc/ssh/sshd_config
+        PasswordAuthentication=no
+
+        Match User root
+        PasswordAuthentication=yes
+
+    Restart ssh
+    /etc/init.d/ssh restart
+
+Change user git shell to git-shell
+    chsh -s /usr/bin/git-shell git
+
+Create user git-ro form read-only access to repos
+
+Create git daemon
+
+Git daemon port 9418
+    git clone git://ip/repo.git
+
+Add ufw rule
+    ufw allow from ip to any port 9418 proto tcp

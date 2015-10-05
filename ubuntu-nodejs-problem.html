@@ -1,0 +1,7 @@
+Ubuntu
+/usr/bin/env: node: No such file or directory
+
+On Ubuntu node is installed in /usr/bin/nodejs not /usr/bin/node. Thats why node is not found
+
+To solve problem make node symlink
+ln -s /usr/bin/nodejs /usr/bin/node

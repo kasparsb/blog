@@ -1,0 +1,89 @@
+#Laravel facades
+
+To understand faceds you need to understand Laravel Service container, because 
+facade provides static interface to classes that are availabe into Service container
+
+Lets create class which will reside in Service container
+
+namespace App\Accounts
+class Accounts {
+	public function test() {
+		return 'im accounts';
+	}
+}
+
+This is a way you put class into service container
+
+App::bind('App\Accounts', function(){
+	return new \App\Accounts();
+})
+
+So, where to put this code. By Laravel standarts you do it from ServiceProvider.
+All your service providers lives in app\Providers
+Open config\app.php, there is section 'providers'
+
+Lets create our custom service provider and save it into app\Providers\AccountsServiceProvider.php
+
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use App;
+
+class AccountsServiceProvider extends ServiceProvider {
+    
+    public function register() {
+        
+        App::bind('App\Accounts', function(){
+            var_dump('singleton.accounts');
+            return new \App\Accounts();
+        });
+
+    }
+
+}
+
+As you can see service binding code is in method register
+
+Now open your config/app.php and register newly created provider.
+Add this line in providers section
+
+App\Providers\AccountsServiceProvider::class,
+
+Thats it with service provider. Now every time you reference class \App\Accounts this class will be
+resolved from service container
+
+Let finaly create facade
+
+create directory app/Facades
+Make new file app/Facades/Accounts.php
+
+
+namespace App\Facades;
+
+use Illuminate\Support\Facades\Facade;
+
+class Accounts extends Facade {
+
+    protected static function getFacadeAccessor() {
+    	return 'App\Accounts'; 
+    }
+
+}
+
+method getFacadeAccessor is which makes magic happens. This method return 'App\Accounts', as you already guesed
+this is our class registered into services container.
+Every time you access Accounts facade laravel will pull out class from service container and call method to this class
+
+And final touch is to make out facade as global allias so you can 
+write in your code Accounts::test instead of \App\Facades\Accounts. That basicaly is the purpose of facades
+
+open config/app.php in section 'aliases' put this line
+
+'Accounts'  => App\Facades\Accounts::class,
+
+Now in your code you can make calls liek this Accounts::test()
+Dont forget to write
+
+use Accounts;
+
+so autoloader knows where to search for Accounts

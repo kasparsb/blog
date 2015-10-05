@@ -1,0 +1,9 @@
+How to map virtualbox shared folder
+
+dev - shared folder name in virtualbox settings
+
+~/dev - here will be shared folder
+Make sure, that this folder exists before mounting
+
+
+sudo mount -t vboxsf -o uid=$UID,gid=$(id -g) dev ~/dev

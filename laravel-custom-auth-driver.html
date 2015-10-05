@@ -1,0 +1,88 @@
+#Laravel custom auth driver
+
+Frist, we need to extend built in Auth class with our custom built auth driver
+In {app\Providers\AppServiceProvider} in method boot declare custom driver
+Call Auth::extend
+First argument is driver name
+Second argument is closure which return new instance of custom auth driver
+
+<code>
+Auth::extend('<custom_driver_name>', function(){
+	return new \App\Drivers\Auth\CustomAuthDriver;
+});
+</code>
+
+Now open auth config file {config\auth.php} and change driver to your custom driver name
+<code>
+...
+'driver' => '<custom_driver_name>',
+...
+</code>
+
+## Lets implement custom driver
+Create directory {app\Drivers\Auth\} and create new file CustomAuthDriver.php
+{app\Drivers\Auth\CustomAuthDriver.php}
+
+<code>
+<?php namespace App\Drivers\Auth;
+
+use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Contracts\Auth\Authenticatable;
+
+class CustomAuthDriver implements UserProvider {
+
+	public function retrieveById($identifier) {
+		return new GenericUser([
+			'email' => $identifier
+		]);
+	}
+
+	public function retrieveByCredentials(array $credentials) {
+		
+	}
+
+	public function retrieveByToken($identifier, $token) {
+
+	}
+
+
+	public function updateRememberToken(Authenticatable $user, $token) {
+
+	}
+
+	public function validateCredentials(Authenticatable $user, array $credentials) {
+		$r = $this->server->login($user->getAuthIdentifier(), $credentials['password']);
+		return $r->status;
+	}
+}
+</code>
+
+
+Methods retrieveByCredentials, retrieveById, retrieveByToken should return instace of \Illuminate\Auth\GenericUser
+If user not found then return null
+
+Method validateCredentials this method returns true is user password ir correct. False otherwise
+
+## Create custom class of GenericUser
+
+<code>
+<?php namespace App\Drivers\Auth;
+
+class GenericUser extends \Illuminate\Auth\GenericUser {
+	public function getAuthIdentifier()
+	{
+		return $this->attributes['email'];
+	}
+}
+</code>
+
+Method getAuthIdentifier
+Here you can define any attribute which will serve as user id. For example 
+user id can be email not id
+
+
+Method retrieveByCredentials
+This method is used to get user by its credentials
+Mainly this will be used to get user when auth attempt is triggered
+$credentials will have keys email and password, these are fields entered by user
+in login form. Password will be in plain text

@@ -1,0 +1,19 @@
+Git-daemon script with systemd
+
+Create file in /etc/systemd/system
+
+[Unit]
+Description=Git daemon
+
+[Service]
+ExecStart=/bin/bash -c "git daemon --reuseaddr --user=git-ro --group=git-ro --base-path=/home/git/ /home/git/"
+
+[Install]
+WantedBy=multi-user.target
+
+
+Run command to enable script on start up
+systemctl enable git-daemon
+
+Run to start daemon immediately
+systemctl start git-daemon
