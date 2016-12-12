@@ -2,3 +2,21 @@ Set Network mode in Virtualbox to Bridged
 
 In guest OS install guest additions
 sudo apt-get install dkms
+
+
+
+// Configure network
+sudo vim /etc/dhcp/dhclient.conf
+
+// Add this line
+supersede domain-name-servers 8.8.8.8;
+
+sudo service network restart
+
+
+// Check if there ir correct dns servers
+vi /etc/resolv.conf
+
+
+// On host maschine
+VBoxManage modifyvm "Dev server" --natdnshostresolver1 on
