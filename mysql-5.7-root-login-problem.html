@@ -1,0 +1,18 @@
+On MySQL version 5.7 can not login in from command line
+mysql -u root
+
+Gives error Acced denied
+
+Howerver you can login by sudo
+sudo mysql -u root
+
+
+To fix this
+Drop all root users
+
+create user 'root'@'%' identified by '';
+grant all privileges on *.* to 'root'@'%';
+flush privileges;
+
+Now you can login from command line
+mysql -u root
