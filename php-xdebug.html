@@ -1,0 +1,22 @@
+How to setup xdebug
+
+Install xdebug
+sudo apt-get install php-xdebug
+
+Configure php.ini
+vi /etc/php/7.0/apache2/php.ini
+
+Append these line to end of php.ini
+
+[XDebug]
+xdebug.profiler_enable_trigger = 1
+xdebug.profiler_output_dir = "/path/to/output/dir"
+xdebug.trace_output_dir = "/path/to/output/dir"
+
+Restart apache
+sudo service apache2 restart
+
+Now you can trigger profiler by adding parameter XDEBUG_PROFILE to get/post/cookie requests
+http://app.local/?XDEBUG_PROFILE
+
+Use kcachegrind to analyze profiler output
