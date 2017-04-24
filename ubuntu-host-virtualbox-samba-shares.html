@@ -1,0 +1,41 @@
+Projekti glabājas uz atsevišķa SSD diska.
+Diska name ir /dev/sdb1
+Uz projektu diska ir mapes
+www - te atrodas kods
+mysql - te atrodas mysql data dir
+
+
+Šīs ir komandas ar kurām piemountēt projektu ssd disku, kad dators ir pārstartēts
+
+// All mounted partitions
+df -h 
+
+// Show unmounted drives
+lsblk
+
+// Mount projects device
+sudo mount /dev/sdb1 ~/projects
+
+
+
+Aplikācijas griežas uz virtuālās mašīnas
+Virtuālā mašīna pie koda un mysql data dir tiek caur samba shārēm
+
+// Šādi var apskatīties sambas statusu uz host datora
+sudo smbstatus
+
+// Šādi var apskatīties shares no virtuālās mašīnas
+// 192.168.0.40 - host datora ip adrese
+smbclient -L 192.168.0.40 -U root
+
+
+// Mount www dir
+sudo mount -t cifs //192.168.0.40/www /var/www -o user=kaspars,password=bbbbbbbb
+// Restart apache
+sudo service apache2 restart
+
+// Mount mysql datadir
+// Svarīgi mountēt direktoriju ar userid=mysql un groupid=mysql, tad visas failu tiesības būs kārtībā un mysql iestartēsies bez problēmām
+sudo mount -t cifs //192.168.0.40/mysql /mnt/mysql -o user=kaspars,password=bbbbbbbb,uid=mysql,gid=mysql
+// Restart mysql
+sudo service mysql restart
