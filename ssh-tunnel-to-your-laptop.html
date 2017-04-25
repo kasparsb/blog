@@ -1,0 +1,21 @@
+You need publicly available server with ssh. Publicly it means server with public IP address
+
+For example create 5$ droplet on DigitalOcean
+
+Edit /etc/ssh/sshd_config
+
+Add line at end of the file
+GatewayPorts yes
+
+Restart ssh service
+service ssh restart
+
+
+On your laptop, start ssh tunnel
+ssh -R 9000:localhost:80 root@public_server_ip_address
+
+
+From your phone
+http://public_server_ip_address:9000
+
+When accessing public_server_ip_address on port 9000 all incoming connections will be redirected to your laptop with port 80
