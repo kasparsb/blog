@@ -1,6 +1,29 @@
 sudo ufw default deny incoming
 sudo ufw default deny outgoing
+
+// Atļaut ienākošos no konkrēta ip uz portu
+// Tikai no konkrētām ip var pieslēgties pie ssh
 ufw allow from [ip] to any port 22 proto tcp
+
+// Atļaujam izejošos pieprasījumus uz noteiktu portu
+// Email porti
+ufw allow out 465
+ufw allow out 587
+
+
+// Web, atļaujam ienākošos un izejošo web trafiku
+// Atļaujam izejošos uz port 80 ar tcp
+ufw allow out proto tcp to any port 80
+// Atļaujam ienākošos uz port 80 ar tcp
+ufw allow in proto tcp to any port 80
+
+
+// Parāda visas rules sanumurētas
+ufw status numbered
+
+// Dzēšam rule pēc numura
+ufw delete [number]
+
 
 
 ufw insert 1 allow out to [ip] port 9418 proto tcp
