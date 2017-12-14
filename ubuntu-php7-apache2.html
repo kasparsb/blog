@@ -1,0 +1,11 @@
+Ubuntu php7 apache2 mod_rewrite
+ 
+// Install php module for apache
+apt-get install php libapache2-mod-php
+
+// Enable mod_rewrite
+a2enmod rewrite
+
+
+// Restart apache
+service apache2 restart
