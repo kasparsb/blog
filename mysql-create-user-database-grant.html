@@ -7,6 +7,9 @@ FLUSH PRIVILEGES;
 
 ALTER USER 'user_first'@'10.133.36.20' IDENTIFIED BY 'new password';
 
+// Vecākā mysql versijām, līdz 5.7.5
+SET PASSWORD FOR 'user_first'@'10.133.36.20' = PASSWORD('new password');
+
 
 
 GRANT SELECT,CREATE USER ON *.* TO 'domaster'@'176.106.59.70' WITH GRANT OPTION;
